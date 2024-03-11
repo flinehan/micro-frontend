@@ -1,13 +1,17 @@
-import Head from 'next/head'
-// import { headers } from 'next/headers';
 import { useRouter } from 'next/router'
 
-export const Main = ()=>{
+export const Main = ({cats})=>{
   // const headersList = headers();
   const router = useRouter()
   // drop query params
   const path = router.asPath.split("?")[0]
   const params = router.query || []
+
+  if (router.isFallback || !cats) {
+    return <div>Loading...</div>;
+  }
+
+
   return(
     <div>
      <p> {path}</p>
@@ -17,6 +21,7 @@ export const Main = ()=>{
           <li>{key}:{params[key]}</li>
         )
       })}
+      <p>cat:{JSON.stringify(cats[0])} </p>
      </ul>
     </div>
   )
