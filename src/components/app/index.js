@@ -1,28 +1,24 @@
-import { useRouter } from 'next/router'
+import { notFound } from 'next/navigation'
+import Script from 'next/script'
 
-export const Main = ({cats})=>{
-  // const headersList = headers();
-  const router = useRouter()
-  // drop query params
-  const path = router.asPath.split("?")[0]
-  const params = router.query || []
+export const Main = ({ settings }) => {
 
-  if (router.isFallback || !cats) {
-    return <div>Loading...</div>;
+  if (!settings) {
+    notFound()
   }
 
+  // if we want to put things on window
+  // useEffect(() => {
+  //   window.superTest = test
+  // })
 
-  return(
+  return (
     <div>
-     <p> {path}</p>
-     <ul> 
-      {Object.keys(params).map((key)=>{
+      {settings.map((setting) => {
         return (
-          <li>{key}:{params[key]}</li>
+          <Script src={setting.url} key={setting.url} />
         )
       })}
-      <p>cat:{JSON.stringify(cats[0])} </p>
-     </ul>
     </div>
   )
 }

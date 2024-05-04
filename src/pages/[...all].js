@@ -1,20 +1,21 @@
 import { Main } from "../components/app";
+import { AppConfigurationClient } from "@azure/app-configuration";
+import { getFrontends } from "../lib/get-frontends";
 
+const connectionString = process.env.AZURE_APPCONFIG_CONNECTION_STRING;
+const client = new AppConfigurationClient(connectionString);
 
-
-export default function CatchAll({cats}) {
+export default function CatchAll({ settings }) {
   return (
-    <Main cats={cats}></Main>
+    <Main settings={settings}></Main>
   )
 }
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps(context) {
 
-  // Fetch data for the specific post using slug
-  const response = await fetch(`https://freetestapi.com/api/v1/cats`);
-  const cats = await response.json();
+  const settings = await getFrontends(client, context)
 
   return {
-    props: { cats },
+    props: { settings },
   };
 }
